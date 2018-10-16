@@ -33,6 +33,10 @@ float TabelaIrrf (float valor1, int dep){
     else if (((valor1 - aux)-(dep*189.59)) > 4664.68){
         ir = (((valor1 - aux)-(dep*189.59)) * 0.275) - 869.36;
     }
+    if(ir<10.00){
+        ir=0;
+        return ir;
+    }
     if(ir>10.00){
         return ir;
     }
@@ -46,19 +50,67 @@ float LiquidoSalario (float salario, int dep){
   return salario;
 }
 
-int
-main ()
+float abs(float valor){
+    return valor > 0 ? valor : -valor;
+}
+
+float bissecao(float salarioLiquido, int dep){
+    float a = salarioLiquido;
+    float b = salarioLiquido * 1.5;
+    float delta = 0.001;
+    
+    float c = (a + b)/2;
+    
+    float fa = LiquidoSalario(a, dep);
+    float fb = LiquidoSalario(b, dep);
+    float fc = LiquidoSalario(c, dep);
+    
+    int i = 0;
+    int max_iterations = 1000;
+    while( abs(fc - salarioLiquido) > delta && i < max_iterations){
+        
+        c = (a + b)/2;
+        
+        fa = LiquidoSalario(a, dep);
+        fb = LiquidoSalario(b, dep);
+        fc = LiquidoSalario(c, dep);
+        
+        if(fc > salarioLiquido){
+            b = c;
+        }
+        else {
+            a = c;
+        }
+        
+        i++;
+    }
+    
+    printf("iteracoes realizadas %d\n", i);
+    printf("SALARIO BRUTO %.2f", c);
+    
+    return c;
+    
+    
+}
+
+
+int main ()
 {
   float salario = 0, liquido=0;
   int qdep=0;
-  printf ("Informe o salario liquido:\n");
+  printf ("Informe o salario liquido desejado:\n");
   scanf ("%f", &salario);
-  printf ("Possui quantos dependentes ?\n");
+  printf ("Possui quantos dependentes, caso nao possua digite 0 ?\n");
   scanf("%d",&qdep);
-  TabelaInss (salario);
-  TabelaIrrf(salario,qdep);
-  liquido = LiquidoSalario (salario, qdep);
-  printf("...");
-  printf ("\nSalario liquido a pagar %.2f", liquido);
+  
+  
+  //passando um salario liquido para calcular o bruto
+  float salarioBruto = bissecao(salario, qdep);
+  
+  
+  
+  liquido = LiquidoSalario (salarioBruto, qdep);
+  printf(" ...");
+  printf ("\nSalario liquido a pagar %.2f\n", liquido);
 
 }
