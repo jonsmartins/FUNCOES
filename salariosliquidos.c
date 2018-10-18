@@ -1,25 +1,30 @@
 #include <stdio.h>
 
-float TabelaInss (float valor){
+float TabelaInss (float valor, int esc){
     float aux = 0;
-    if (valor < 1693.73){
-        aux = valor * 0.08;
+    if(esc==1){
+        if (valor < 1693.73){
+            aux = valor * 0.08;
+        }
+        else if ((valor < 2822.91) && (valor > 1693.72)){
+            aux = valor * 0.09;
+        }
+        else if ((valor > 2822.91) && (valor < 5645.81)){
+            aux = valor * 0.11;
+        }
+        else if (valor > 5645,80){
+            aux = 621.03;
+        }
+        return aux;
     }
-    else if ((valor < 2822.91) && (valor > 1693.72)){
-        aux = valor * 0.09;
+    else{
+        return aux = valor * 0.11;
     }
-    else if ((valor > 2822.91) && (valor < 5645.81)){
-        aux = valor * 0.11;
-    }
-    else if (valor > 5645,80){
-        aux = 621.03;
-    }
-    return aux;
-    
+
 }
 
-float TabelaIrrf (float valor1, int dep){
-    float aux = TabelaInss (valor1);
+float TabelaIrrf (float valor1, int dep, int esc){
+    float aux = TabelaInss (valor1,esc);
     float ir = 0;
     if ((((valor1 - aux)-(dep*189.59)) > 1903.99) && ((((valor1 - aux)-(dep*189.59)) < 2826.66))){
         ir = (((valor1 - aux)-(dep*189.590)) * 0.075) - 142.80;
@@ -42,54 +47,52 @@ float TabelaIrrf (float valor1, int dep){
     }
 }
 
-float LiquidoSalario (float salario, int dep){
+float LiquidoSalario (float salario, int dep, int esc){
   float inss = 0, irrf = 0;
-  inss = TabelaInss(salario);
-  irrf = TabelaIrrf(salario, dep);
+  inss = TabelaInss(salario, esc);
+  irrf = TabelaIrrf(salario, dep, esc);
   salario = (salario - inss) - irrf;
   return salario;
 }
-
 float abs(float valor){
     return valor > 0 ? valor : -valor;
 }
 
-float bissecao(float salarioLiquido, int dep){
+float bissecao(float salarioLiquido, int dep, int esc){
     float a = salarioLiquido;
     float b = salarioLiquido * 1.5;
     float delta = 0.001;
-    
+
     float c = (a + b)/2;
-    
-    float fa = LiquidoSalario(a, dep);
-    float fb = LiquidoSalario(b, dep);
-    float fc = LiquidoSalario(c, dep);
-    
+
+    float fa = LiquidoSalario(a, dep, esc);
+    float fb = LiquidoSalario(b, dep, esc);
+    float fc = LiquidoSalario(c, dep, esc);
+
     int i = 0;
     int max_iterations = 1000;
     while( abs(fc - salarioLiquido) > delta && i < max_iterations){
-        
+
         c = (a + b)/2;
-        
-        fa = LiquidoSalario(a, dep);
-        fb = LiquidoSalario(b, dep);
-        fc = LiquidoSalario(c, dep);
-        
+
+        fa = LiquidoSalario(a, dep, esc);
+        fb = LiquidoSalario(b, dep, esc);
+        fc = LiquidoSalario(c, dep, esc);
+
         if(fc > salarioLiquido){
             b = c;
         }
         else {
             a = c;
         }
-        
+
         i++;
     }
-    
+
     printf("iteracoes realizadas %d\n", i);
-    printf("SALARIO BRUTO %.2f", c);
-    
+    printf("\nSALARIO BRUTO %.2f", c);
+
     return c;
-    
     
 }
 
@@ -97,20 +100,33 @@ float bissecao(float salarioLiquido, int dep){
 int main ()
 {
   float salario = 0, liquido=0;
+  int resp=0, i=0;
   int qdep=0;
-  printf ("Informe o salario liquido desejado:\n");
+  while(i<1){
+    printf("DIGITE: 1-FUNCIONARIO OU 2-PROLABORE/RPA\n");
+    scanf("%d",&resp);
+    if((resp==1)||(resp==2)){
+        i++;
+    }
+  }
+  printf ("INFORME O SALARIO LIQUIDO DESEJADO:\n");
   scanf ("%f", &salario);
-  printf ("Possui quantos dependentes, caso nao possua digite 0 ?\n");
+  printf ("POSSUI QUANTOS DEPENDENTES? CASO NAO POSSUA DIGITE 0\n");
   scanf("%d",&qdep);
-  
-  
+
+
   //passando um salario liquido para calcular o bruto
-  float salarioBruto = bissecao(salario, qdep);
-  
-  
-  
-  liquido = LiquidoSalario (salarioBruto, qdep);
+  float salarioBruto = bissecao(salario, qdep, resp);
+
+
+
+  liquido = LiquidoSalario (salarioBruto, qdep, resp);
   printf(" ...");
-  printf ("\nSalario liquido a pagar %.2f\n", liquido);
+  printf ("\nSALARIO LIQUIDO A PAGAR %.2f\n\n", liquido);
+  float inss=TabelaInss(salarioBruto, resp);
+  float irrf=TabelaIrrf(salarioBruto,qdep,resp);
+  printf("INSS: %.2f E IRRF: %.2f \n\n",inss,irrf);
+
+  system("pause");
 
 }
