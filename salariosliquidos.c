@@ -17,7 +17,7 @@ float TabelaInss (float valor, int esc){
         }
         return aux;
     }
-    if (esc==2){
+    else if (esc==2){
         return aux = valor * 0.11;
     }
     else{
