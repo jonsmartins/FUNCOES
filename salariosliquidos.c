@@ -17,8 +17,11 @@ float TabelaInss (float valor, int esc){
         }
         return aux;
     }
-    else{
+    if (esc==2){
         return aux = valor * 0.11;
+    }
+    else{
+        return aux = 0;
     }
 
 }
@@ -93,7 +96,8 @@ float bissecao(float salarioLiquido, int dep, int esc){
     printf("\nSALARIO BRUTO %.2f", c);
 
     return c;
-    
+
+
 }
 
 
@@ -103,9 +107,9 @@ int main ()
   int resp=0, i=0;
   int qdep=0;
   while(i<1){
-    printf("DIGITE: 1-FUNCIONARIO OU 2-PROLABORE/RPA\n");
+    printf("DIGITE: 1-FUNCIONARIO, 2-PROLABORE/RPA OU 3-ESTAGIARIO\n");
     scanf("%d",&resp);
-    if((resp==1)||(resp==2)){
+    if((resp==1)||(resp==2)||(resp==3)){
         i++;
     }
   }
