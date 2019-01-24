@@ -3,21 +3,21 @@
 float TabelaInss (float valor, int esc){
     float aux = 0;
     if(esc==1){
-        if (valor < 1693.73){
+        if (valor < 1751.81){
             aux = valor * 0.08;
         }
-        else if ((valor < 2822.91) && (valor > 1693.72)){
+        else if ((valor < 2919.72) && (valor > 1751.81)){
             aux = valor * 0.09;
         }
-        else if ((valor > 2822.91) && (valor < 5645.81)){
+        else if ((valor > 2919.72) && (valor < 5839.45)){
             aux = valor * 0.11;
         }
-        else if (valor > 5645,80){
-            aux = 621.03;
+        else if (valor > 5839.45){
+            aux = 642.33;
         }
         return aux;
     }
-    else if (esc==2){
+    if (esc==2){
         return aux = valor * 0.11;
     }
     else{
